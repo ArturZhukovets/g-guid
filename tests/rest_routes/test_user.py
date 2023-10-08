@@ -1,5 +1,3 @@
-
-
 def test_create_user(client):
     data = {"name": "testuser@nofoobar.com", "password": "testing"}
     response = client.post("/users", json=data)
@@ -11,5 +9,3 @@ def test_create_user(client):
 
 def test_user_is_super_user(admin_user):
     assert admin_user.is_superuser
-
-

@@ -1,3 +1,5 @@
+import os
+import sys
 from typing import Any
 from typing import Generator
 
@@ -6,9 +8,6 @@ from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-
-import sys
-import os
 
 # this is to include backend dir in sys.path so that we can import from db,main.py
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -60,8 +59,7 @@ def db_session(app: FastAPI) -> Generator[SessionTesting, Any, None]:
 
 @pytest.fixture(scope="function")
 def client(
-    app: FastAPI,
-    db_session: SessionTesting
+    app: FastAPI, db_session: SessionTesting
 ) -> Generator[TestClient, Any, None]:
     """
     Create a new FastAPI TestClient that uses the `db_session` fixture to override
@@ -84,6 +82,7 @@ def user(db_session: SessionTesting):
     user_pydantic = UserCreate(name="Oleh", password="password")
     user = create_new_user(user_pydantic, db_session)
     return user
+
 
 @pytest.fixture(scope="function")
 def admin_user(db_session: SessionTesting):

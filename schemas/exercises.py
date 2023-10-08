@@ -2,7 +2,9 @@ from datetime import datetime
 from typing import Optional
 
 import pydantic
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import BaseModel
+from pydantic import ConfigDict
+from pydantic import Field
 from slugify import slugify
 
 from db.models.exersices import ExerciseCategory
@@ -12,6 +14,7 @@ class ExerciseBase(BaseModel):
     title: str
     description: str
     category: ExerciseCategory
+
 
 class ExerciseCreate(ExerciseBase):
     # user_id: int
@@ -34,8 +37,6 @@ class ShowExercise(ExerciseBase):
 
     model_config = ConfigDict(from_attributes=True)
 
-
     # TODO deprecated delete after check
     # class Config:
     #     from_attributes = True
-

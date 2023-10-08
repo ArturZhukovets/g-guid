@@ -1,17 +1,22 @@
-from typing import Any, Type, List
-
-from fastapi import HTTPException, status
+from fastapi import HTTPException
+from fastapi import status
 from sqlalchemy.orm import Session
 
 from db.models.exersices import Exercise
 from db.models.users import User
-from schemas.exercises import ExerciseCreate, ExerciseUpdate
+from schemas.exercises import ExerciseCreate
+from schemas.exercises import ExerciseUpdate
 
 
-def create_new_exercise(exercise: ExerciseCreate, db: Session, user_id: int) -> Exercise | None:
+def create_new_exercise(
+    exercise: ExerciseCreate, db: Session, user_id: int
+) -> Exercise | None:
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Specified user does not exist")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Specified user does not exist",
+        )
     exercise = Exercise(**exercise.model_dump(), user_id=user_id)
     db.add(exercise)
     db.commit()
@@ -30,7 +35,9 @@ def retrieve_exercises_list(user_id: int, db: Session) -> list[Exercise]:
     return exercises
 
 
-def update_exercise(exercise_id: int, exercise: ExerciseUpdate, db: Session) -> Exercise | None:
+def update_exercise(
+    exercise_id: int, exercise: ExerciseUpdate, db: Session
+) -> Exercise | None:
     exercise_instance = db.query(Exercise).filter(Exercise.id == exercise_id).first()
     if not exercise_instance:
         return

@@ -1,7 +1,15 @@
 import enum
 from datetime import datetime
-from sqlalchemy import Column, Integer, Text, String, DateTime, ForeignKey, Enum as EnumSQL
+
+from sqlalchemy import Column
+from sqlalchemy import DateTime
+from sqlalchemy import Enum as EnumSQL
+from sqlalchemy import ForeignKey
+from sqlalchemy import Integer
+from sqlalchemy import String
+from sqlalchemy import Text
 from sqlalchemy.orm import relationship
+
 from db.db import Base
 
 
@@ -22,4 +30,3 @@ class Exercise(Base):
     user_id = Column(Integer, ForeignKey("user.id"))
 
     user = relationship("User", back_populates="exercises")
-

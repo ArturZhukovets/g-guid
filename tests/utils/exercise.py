@@ -13,4 +13,3 @@ def create_random_exercise(db: Session, user_id: int):
     )
     exercise = create_new_exercise(exercise_pydantic, db, user_id)
     return exercise
-

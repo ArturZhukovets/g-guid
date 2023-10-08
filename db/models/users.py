@@ -1,4 +1,7 @@
-from sqlalchemy import Column, Integer, String, Boolean
+from sqlalchemy import Boolean
+from sqlalchemy import Column
+from sqlalchemy import Integer
+from sqlalchemy import String
 from sqlalchemy.orm import relationship
 
 from db.db import Base
@@ -18,4 +21,3 @@ class User(Base):
 
     def __repr__(self) -> str:
         return self.name
-

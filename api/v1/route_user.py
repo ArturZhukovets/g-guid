@@ -1,12 +1,15 @@
 from typing import List
 
-from fastapi import APIRouter, status
+from fastapi import APIRouter
 from fastapi import Depends
+from fastapi import status
 from sqlalchemy.orm import Session
 
-from schemas.users import UserCreate, ShowUser
 from db import get_db
-from db.repository.users import create_new_user, retrieve_all_users
+from db.repository.users import create_new_user
+from db.repository.users import retrieve_all_users
+from schemas.users import ShowUser
+from schemas.users import UserCreate
 
 
 router = APIRouter()
@@ -27,4 +30,3 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
 def delete_user(user_id: int):
     # TODO after realizing authentication
     pass
-

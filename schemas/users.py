@@ -1,5 +1,6 @@
-
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import BaseModel
+from pydantic import ConfigDict
+from pydantic import Field
 
 from schemas.exercises import ShowExercise
 
@@ -7,8 +8,10 @@ from schemas.exercises import ShowExercise
 class UserBase(BaseModel):
     name: str
 
+
 class UserCreate(UserBase):
     password: str = Field(..., min_length=4)
+
 
 class UserDelete(BaseModel):
     id: int
