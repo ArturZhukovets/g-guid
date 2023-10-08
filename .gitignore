@@ -1,0 +1,8 @@
+db_docker/
+*.db
+*.env
+.pytest_cache
+.dockerignore
+.idea
+*.iml
+*.xml
