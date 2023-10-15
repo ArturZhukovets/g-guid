@@ -24,5 +24,10 @@ class Settings(BaseSettings):
     POSTGRES_DB: str = os.getenv("POSTGRES_DB", "tdd")
     DATABASE_URL: str = f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_SERVER}:{POSTGRES_PORT}/{POSTGRES_DB}"
 
+    # Security
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 20
+    ENCODE_ALGORITHM: str = "HS256"
+    SECRET_KEY: str = os.getenv("SECRET_KEY")
+
 
 settings = Settings()

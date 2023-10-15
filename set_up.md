@@ -33,6 +33,7 @@ pre-commit run --all-files
 
 ### Modifying pre-commit-config.yaml
 Modify .pre-commit-config.yaml if needed to set up some pre commit checks
+(Проверку Линтером не добавлял)
 
 
 ***

@@ -1,4 +1,3 @@
-from typing import Any
 from typing import Generator
 
 from sqlalchemy import create_engine

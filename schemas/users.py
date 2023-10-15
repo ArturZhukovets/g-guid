@@ -18,11 +18,19 @@ class UserDelete(BaseModel):
 
 
 class ShowUser(UserBase):
+    """For showing list of users"""
+
     id: int
     is_superuser: bool
     exercises: list[ShowExercise]
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class ShowUserDetail(ShowUser):
+    """For showing specified user"""
+
+    pass
 
     # # Todo del after check
     # class Config:

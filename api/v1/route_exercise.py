@@ -7,7 +7,9 @@ from fastapi import HTTPException
 from fastapi import status
 from sqlalchemy.orm import Session
 
+from api.v1.route_auth import get_current_user
 from db import get_db
+from db.models.users import User
 from db.repository.exercises import create_new_exercise
 from db.repository.exercises import delete_exercise
 from db.repository.exercises import retrieve_exercise
@@ -31,10 +33,12 @@ def exercises_list(user_id: int, db: Session = Depends(get_db)) -> List[ShowExer
     "/create-exercise", response_model=ShowExercise, status_code=status.HTTP_201_CREATED
 )
 async def exercise_create(
-    exercise: ExerciseCreate, user_id: int, db: Session = Depends(get_db)
+    exercise: ExerciseCreate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     """Create exersice related with specified user"""
-    exercise = create_new_exercise(exercise, db, user_id)
+    exercise = create_new_exercise(exercise, db, current_user.id)
     return exercise
 
 

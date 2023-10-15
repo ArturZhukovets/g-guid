@@ -9,10 +9,10 @@ from db.db import Base
 
 class User(Base):
     __tablename__ = "user"
-    id: int = Column(Integer, primary_key=True, index=True)
-    name: str = Column(String, index=True, nullable=False)
-    password: str = Column(String, nullable=False)
-    is_superuser: bool = Column(Boolean(), default=False)
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, index=True, nullable=False, unique=True)
+    password = Column(String, nullable=False)
+    is_superuser = Column(Boolean(), default=False)
 
     exercises = relationship("Exercise", back_populates="user")
 
@@ -20,4 +20,4 @@ class User(Base):
         return self.__repr__()
 
     def __repr__(self) -> str:
-        return self.name
+        return str(self.name)
