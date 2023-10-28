@@ -6,3 +6,5 @@ db_docker/
 .idea
 *.iml
 *.xml
+__pycache__
+*__pycache__*
