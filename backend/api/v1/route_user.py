@@ -2,13 +2,8 @@ from typing import Final
 from typing import List
 
 from api.v1.route_auth import get_current_user
-from db import get_db
 from db.models.users import User
 from db.models.users import UserRoles
-from db.repository.users import create_new_user
-from db.repository.users import get_user_subscriptions
-from db.repository.users import retrieve_all_users
-from db.repository.users import subscribe_user_on_coach
 from db.repository.users import UsersRepository
 from fastapi import APIRouter
 from fastapi import Depends
@@ -18,7 +13,6 @@ from schemas.users import ChangeUserRole
 from schemas.users import ShowUser
 from schemas.users import SubscribeOnCoach
 from schemas.users import UserCreate
-from sqlalchemy.orm import Session
 
 
 router = APIRouter()
