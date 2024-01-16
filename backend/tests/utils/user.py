@@ -1,10 +1,13 @@
-from db.models.users import User
-from db.repository.users import create_new_user
-from schemas.users import UserCreate
-from sqlalchemy.orm import Session
+from fastapi.testclient import TestClient
 
 
-def create_random_user(db: Session) -> User:
-    user_pydantic = UserCreate(name="Artur", password="HelloSupaDupaWorld_")
-    user = create_new_user(user=user_pydantic, db=db)
-    return user
+def auth_token_by_user_credentials(
+    client: TestClient, username: str, password: str
+) -> str:
+    """
+    Return a valid token for the user with given username.
+    If the user does not exist - it is created first.
+    """
+    json_data = {"username": username, "password": password}
+    response = client.post("/auth/token", data=json_data)
+    return response.json()["access_token"]

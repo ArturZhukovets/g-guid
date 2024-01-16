@@ -30,5 +30,11 @@ class Settings(BaseSettings):
     ENCODE_ALGORITHM: str = "HS256"
     SECRET_KEY: str = os.getenv("SECRET_KEY")
 
+    # TESTS
+    TEST_USER_NAME: str = "Oleh"
+    TEST_USER_PASSWORD: str = "password"
+    TEST_ADMIN_NAME: str = "Artur"
+    TEST_ADMIN_PASSWORD: str = "password"
+
 
 settings = Settings()

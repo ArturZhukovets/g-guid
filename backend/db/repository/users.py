@@ -1,3 +1,5 @@
+from typing import Optional
+
 from db.db import SessionLocal
 from db.models.users import User
 from db.models.users import UserSubscription
@@ -6,21 +8,22 @@ from db.repository.repository import SQLAlchemyRepository
 
 class UsersRepository(SQLAlchemyRepository):
     # TODO Think about working with Depends(get_current_user) in this class
+    # TODO CHANGE ALL "with sessionLocal()" context managers to specific db_session
     model = User
 
     def change_user_role(self, user_id: int, role: str):
         """Change specified user role"""
         # TODO REPLACE IT WITH ABSTRACT "UPDATE" METHOD AND CHANGE USER ROLE ONLY FROM SERVICES
         # TODO Realize only user with admin privileges can change user role
-        with SessionLocal() as session:
-            db_user = session.query(self.model).filter(self.model.id == user_id).first()
-            if not db_user:
-                raise ValueError(f"User with id={user_id} does not exist")
-            db_user.role = role
-
-            session.commit()
-            session.refresh(db_user)
-            return db_user
+        db_user = (
+            self.session.query(self.model).filter(self.model.id == user_id).first()
+        )
+        if not db_user:
+            raise ValueError(f"User with id={user_id} does not exist")
+        db_user.role = role
+        self.session.commit()
+        self.session.refresh(db_user)
+        return db_user
 
     def get_user_subscriptions(self, cur_user: User) -> list[User]:
         """Return all subscriptions of specified user"""
@@ -28,6 +31,10 @@ class UsersRepository(SQLAlchemyRepository):
             ids = [sub.coach_id for sub in cur_user.subscriptions]
             subs_list2 = session.query(self.model).filter(self.model.id.in_(ids)).all()
             return subs_list2
+
+    def get_user_by_username(self, username: str) -> Optional[User]:
+        user = self.session.query(self.model).filter(User.name == username).first()
+        return user
 
     def subscribe(self, cur_user: User, subscribe_on_id: int):
         """Subscribe specified user on coach (which is also a user with Coach category)"""

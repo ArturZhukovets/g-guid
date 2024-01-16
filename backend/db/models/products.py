@@ -36,3 +36,5 @@ class ProductComposition(Base):
     carbohydrates = Column(Float, default=0, nullable=False)
 
     category_id = Column(Integer, ForeignKey(ProductCategory.id), nullable=False)
+
+    # category = relationship("ProductCategory")

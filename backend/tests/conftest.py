@@ -9,16 +9,19 @@ from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
+
 # this is to include backend dir in sys.path so that we can import from db,main.py
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from schemas.users import UserCreate
-
 from db import get_db
 from db.base import Base
 from api.base import api_router
 
-from db.repository.users import create_new_user
+from db.repository.users import UsersRepository
+from core.hashing import Hasher
+from core.config import settings
+from tests.utils.user import auth_token_by_user_credentials
 
 
 def start_application():
@@ -35,7 +38,7 @@ engine = create_engine(
 SessionTesting = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope="module")
 def app() -> Generator[FastAPI, Any, None]:
     """
     Create a fresh database on each test case.
@@ -46,7 +49,7 @@ def app() -> Generator[FastAPI, Any, None]:
     Base.metadata.drop_all(engine)
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope="module")
 def db_session(app: FastAPI) -> Generator[SessionTesting, Any, None]:
     connection = engine.connect()
     transaction = connection.begin()
@@ -57,7 +60,7 @@ def db_session(app: FastAPI) -> Generator[SessionTesting, Any, None]:
     connection.close()
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope="module")
 def client(
     app: FastAPI, db_session: SessionTesting
 ) -> Generator[TestClient, Any, None]:
@@ -77,15 +80,33 @@ def client(
         yield client
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope="module")
 def user(db_session: SessionTesting):
-    user_pydantic = UserCreate(name="Oleh", password="password")
-    user = create_new_user(user_pydantic, db_session)
+    password = Hasher.get_password_hash(settings.TEST_USER_PASSWORD)
+    user_pydantic = UserCreate(name=settings.TEST_USER_NAME, password=password)
+    repository = UsersRepository(db_session)
+    data = user_pydantic.model_dump()
+    user = repository.add_record(data)
     return user
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope="module")
 def admin_user(db_session: SessionTesting):
-    user_pydantic = UserCreate(name="Artur", password="password")
-    user = create_new_user(user_pydantic, db_session, is_superuser=True)
+    password = Hasher.get_password_hash(settings.TEST_ADMIN_PASSWORD)
+    user_pydantic = UserCreate(name=settings.TEST_ADMIN_NAME, password=password)
+    repository = UsersRepository(db_session)
+    data = user_pydantic.model_dump()
+    data["is_superuser"] = True
+    user = repository.add_record(data)
     return user
+
+
+@pytest.fixture(scope="module")
+def admin_authorization_token_header(client: TestClient, admin_user) -> dict[str, str]:
+    username = admin_user.name
+    password = settings.TEST_ADMIN_PASSWORD
+    authorization_token = auth_token_by_user_credentials(
+        client=client, username=username, password=password
+    )
+    header = {"Authorization": f"Bearer {authorization_token}"}
+    return header

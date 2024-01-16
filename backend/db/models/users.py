@@ -28,7 +28,10 @@ class User(Base):
 
     exercises = relationship("Exercise", back_populates="user")
     subscriptions = relationship(
-        "UserSubscription", backref="user", foreign_keys="[UserSubscription.owner_id]"
+        "UserSubscription",
+        backref="user",
+        foreign_keys="[UserSubscription.owner_id]",
+        cascade="all, delete-orphan",
     )
 
     def __str__(self) -> str:
@@ -41,6 +44,6 @@ class User(Base):
 class UserSubscription(Base):
     __tablename__ = "user_subscription"
     id = Column(Integer, primary_key=True, index=True)
-    owner_id = Column(Integer, ForeignKey(User.id), nullable=False)
-    coach_id = Column(Integer, ForeignKey(User.id), nullable=False)
+    owner_id = Column(Integer, ForeignKey(User.id, ondelete="CASCADE"), nullable=False)
+    coach_id = Column(Integer, ForeignKey(User.id, ondelete="CASCADE"), nullable=False)
     subscription_date = Column(DateTime, default=datetime.datetime.utcnow)

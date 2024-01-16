@@ -1,7 +1,5 @@
 from typing import List
-from typing import Type
 
-from api.v1.route_auth import get_current_user
 from db import get_db
 from db.models.users import User
 from db.repository.exercises import create_new_exercise
@@ -17,6 +15,7 @@ from schemas.exercises import ExerciseCreate
 from schemas.exercises import ExerciseUpdate
 from schemas.exercises import ShowExercise
 from sqlalchemy.orm import Session
+from utils.dependencies import get_current_user
 
 router = APIRouter()
 

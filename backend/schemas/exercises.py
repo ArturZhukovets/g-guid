@@ -35,7 +35,3 @@ class ShowExercise(ExerciseBase):
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
-
-    # TODO deprecated delete after check
-    # class Config:
-    #     from_attributes = True
