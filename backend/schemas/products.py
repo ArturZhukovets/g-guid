@@ -17,12 +17,16 @@ class ProductCategoryCreate(ProductCategory):
     pass
 
 
+# ================================================================= Product |
+
+
 class ProductBase(BaseModel):
     title: str
     category_id: int
 
 
 class ProductShow(ProductBase):
+    id: int
     calories: float
     proteins: float
     fat: float
@@ -43,3 +47,7 @@ class ProductCreate(ProductBase):
     proteins: float
     fat: float
     carbohydrates: float
+
+
+class ProductUpdate(ProductCreate):
+    pass

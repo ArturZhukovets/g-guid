@@ -15,6 +15,7 @@ class ProductCategory(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, index=True, nullable=False, unique=True)
+    ru_title = Column(String, index=True, nullable=True, unique=True)
 
     products = relationship("ProductComposition", backref="category")
 
@@ -27,6 +28,7 @@ class ProductComposition(Base):
     __tablename__ = "product_composition"
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, index=True, nullable=False, unique=True)
+    ru_title = Column(String, index=True, nullable=True, unique=True)
     creation_date = Column(DateTime, default=datetime.now)
     update_date = Column(DateTime, default=datetime.now)
 
@@ -35,6 +37,10 @@ class ProductComposition(Base):
     fat = Column(Float, default=0, nullable=False)
     carbohydrates = Column(Float, default=0, nullable=False)
 
-    category_id = Column(Integer, ForeignKey(ProductCategory.id), nullable=False)
+    fdc_id = Column(Integer, nullable=True)
+
+    category_id = Column(
+        Integer, ForeignKey(ProductCategory.id, ondelete="CASCADE"), nullable=False
+    )
 
     # category = relationship("ProductCategory")

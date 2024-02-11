@@ -1,6 +1,5 @@
 from typing import Optional
 
-from db.db import SessionLocal
 from db.models.products import ProductCategory
 from db.models.products import ProductComposition
 from db.repository.repository import SQLAlchemyRepository
@@ -10,14 +9,25 @@ from sqlalchemy.orm import joinedload
 class ProductsRepository(SQLAlchemyRepository):
     model = ProductComposition
 
-    def select_all_with_categories(self, condition: Optional[dict] = None):
-        with SessionLocal() as session:
-            products = (
-                session.query(self.model).options(joinedload(self.model.category)).all()
-            )
-            if condition:
-                products.filter_by(**condition)
-            return products
+    def select_all_with_categories(
+        self, offset: int, limit: int, condition: Optional[dict] = None
+    ):
+        products = self.session.query(self.model).options(
+            joinedload(self.model.category)
+        )
+        if condition:
+            products.filter_by(**condition)
+        return products.offset(offset).limit(limit).all()
+
+    def update_product(self, product_id: int, data: dict):
+        product = self.session.query(self.model).filter_by(id=product_id).first()
+        if not product:
+            raise ValueError("Product does not exist.")
+        for key, value in data.items():
+            if hasattr(product, key):
+                setattr(product, key, value)
+        self.session.commit()
+        return product
 
 
 class ProductCategoryRepository(SQLAlchemyRepository):

@@ -8,3 +8,5 @@ db_docker/
 *.xml
 __pycache__
 *__pycache__*
+
+utils/*.txt*

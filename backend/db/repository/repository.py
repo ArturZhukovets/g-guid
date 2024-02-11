@@ -29,8 +29,6 @@ class SQLAlchemyRepository(AbstractRepository):
     model = None
 
     def __init__(self, session: Session) -> None:
-        # if not session:
-        #     session = get_db().__next__()
         self.session = session
 
     def select_all_records(self, condition: Optional[dict] = None) -> Sequence:
@@ -53,3 +51,9 @@ class SQLAlchemyRepository(AbstractRepository):
         self.session.delete(record)
         self.session.commit()
         return record.id
+
+    def get_record_by_id(self, record_id: int):
+        record = self.session.query(self.model).filter_by(id=record_id).first()
+        if not record:
+            raise ValueError(f"Record with id={record_id} does not exist")
+        return record
