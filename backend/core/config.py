@@ -36,5 +36,11 @@ class Settings(BaseSettings):
     TEST_ADMIN_NAME: str = "Artur"
     TEST_ADMIN_PASSWORD: str = "password"
 
+    # CORS SETTINGS
+    ALLOW_METHODS: list[str] = ["GET", "POST", "OPTIONS", "DELETE", "PATCH", "PUT"]
+    ALLOW_HEADERS: list[str] = ["*"]
+    ALLOW_CREDENTIALS: bool = True
+    ALLOW_ORIGINS: list[str] = ["*"]
+
 
 settings = Settings()

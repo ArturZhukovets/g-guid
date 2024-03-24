@@ -3,7 +3,7 @@ name = "g-guid"
 version = "0.1.0"
 description = ""
 authors = ["gvensye <bnlvdn7483@gmail.com>"]
-readme = "README.md"
+readme = "readme.md"
 packages = [{include = "g_guid"}]
 
 [tool.poetry.dependencies]

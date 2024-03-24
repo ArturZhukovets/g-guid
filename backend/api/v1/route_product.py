@@ -18,6 +18,34 @@ from utils.dependencies import verify_admin
 router = APIRouter()
 
 
+# ====================================================== ProductCategory |
+
+@router.post("/category", response_model=ProductCategoryShow)
+def create_product_category(
+    category: ProductCategoryCreate,
+    session: Session = Depends(get_db),
+):
+    repository = ProductCategoryRepository(session)
+    data = category.model_dump()
+    try:
+        category = repository.add_record(data=data)
+    except Exception as ex:
+        print(ex)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Something went wrong while creating product category",
+        )
+    return category
+
+
+@router.get("/category", response_model=list[ProductCategoryShow])
+def product_category_list(session: Session = Depends(get_db)):
+    repository = ProductCategoryRepository(session)
+    product_categories = repository.select_all_records()
+    return product_categories
+
+# ====================================================== Products |
+
 @router.get("/", response_model=list[ProductShow])
 def products_list(session: Session = Depends(get_db), offset: int = 0, limit: int = 10):
     repository = ProductsRepository(session)
@@ -44,7 +72,7 @@ def create_product(product: ProductCreate, session: Session = Depends(get_db)):
 def delete_product(
     product_id: int,
     session: Session = Depends(get_db),
-    admin_user: User = Depends(verify_admin),
+    # TODO ADD ONLY ADMIN CAN DELETE PRODUCT admin_user: User = Depends(verify_admin),
 ):
     repository = ProductsRepository(session)
     repository.delete_record(id=product_id)
@@ -69,30 +97,3 @@ def detail_product(product_id: int, session: Session = Depends(get_db)):
     product = repository.get_record_by_id(record_id=product_id)
     return product
 
-
-# ====================================================== ProductCategory |
-
-
-@router.post("/category", response_model=ProductCategoryShow)
-def create_product_category(
-    category: ProductCategoryCreate,
-    session: Session = Depends(get_db),
-):
-    repository = ProductCategoryRepository(session)
-    data = category.model_dump()
-    try:
-        category = repository.add_record(data=data)
-    except Exception as ex:
-        print(ex)
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Something went wrong while creating product category",
-        )
-    return category
-
-
-@router.get("/category", response_model=list[ProductCategoryShow])
-def product_category_list(session: Session = Depends(get_db)):
-    repository = ProductCategoryRepository(session)
-    product_categories = repository.select_all_records()
-    return product_categories

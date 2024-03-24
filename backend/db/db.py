@@ -16,7 +16,8 @@ def get_db() -> Generator:
     try:
         db = SessionLocal()
         yield db
-    except Exception:
+    except Exception as ex:
+        print(ex)
         db.rollback()
     finally:
         print("CALL CLOSE()")

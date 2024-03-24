@@ -4,6 +4,7 @@ from db.models.products import ProductCategory
 from db.models.products import ProductComposition
 from db.repository.repository import SQLAlchemyRepository
 from sqlalchemy.orm import joinedload
+from sqlalchemy import desc
 
 
 class ProductsRepository(SQLAlchemyRepository):
@@ -14,7 +15,7 @@ class ProductsRepository(SQLAlchemyRepository):
     ):
         products = self.session.query(self.model).options(
             joinedload(self.model.category)
-        )
+        ).order_by(desc(self.model.id))
         if condition:
             products.filter_by(**condition)
         return products.offset(offset).limit(limit).all()

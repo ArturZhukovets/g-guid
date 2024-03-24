@@ -1,5 +1,5 @@
 import axios from "axios"
-
+import productListUrl from "../endpoints.js"
 
 // const axios = require('axios').default;
 
@@ -16,10 +16,10 @@ async function getProduct(productId) {
 
 async function getProductsList(params) {
     try {
-        const response = await axios.get("http://127.0.0.1:8000/products/");
-        return response.data;
+        const response = await axios.get(productListUrl);
+        return await response.data;
     } catch (error) {
-        console.error(error.messeage);
+        console.error(error.message);
         throw error;
     }
 }
