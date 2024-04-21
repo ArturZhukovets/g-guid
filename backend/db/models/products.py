@@ -17,7 +17,7 @@ class ProductCategory(Base):
     title = Column(String, index=True, nullable=False, unique=True)
     ru_title = Column(String, index=True, nullable=True, unique=True)
 
-    products = relationship("ProductComposition", backref="category")
+    products = relationship("ProductComposition", back_populates="category")
 
 
 class ProductComposition(Base):
@@ -43,4 +43,4 @@ class ProductComposition(Base):
         Integer, ForeignKey(ProductCategory.id, ondelete="CASCADE"), nullable=False
     )
 
-    # category = relationship("ProductCategory")
+    category = relationship("ProductCategory", back_populates="products")

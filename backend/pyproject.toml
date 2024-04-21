@@ -8,7 +8,7 @@ packages = [{include = "g_guid"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-fastapi = "^0.103.1"
+fastapi = "^0.106.0"
 uvicorn = "^0.23.2"
 sqlalchemy = "2.0.13"
 psycopg2-binary = "2.9.6"
@@ -22,6 +22,7 @@ pydantic-settings = "^2.0.3"
 pre-commit = "^3.4.0"
 python-jose = "^3.3.0"
 python-multipart = "^0.0.6"
+fastapi-debug-toolbar = "^0.6.2"
 
 
 [tool.poetry.group.dev.dependencies]

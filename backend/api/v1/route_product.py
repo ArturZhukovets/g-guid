@@ -1,8 +1,10 @@
+from typing import Annotated
+
+from core.pagination import PaginationParams, pagination_params, PaginatedResponse, Paginator
 from db import get_db
-from db.models.users import User
 from db.repository.products import ProductCategoryRepository
 from db.repository.products import ProductsRepository
-from fastapi import APIRouter
+from fastapi import APIRouter, Request
 from fastapi import Depends
 from fastapi import HTTPException
 from fastapi import status
@@ -13,7 +15,6 @@ from schemas.products import ProductDetail
 from schemas.products import ProductShow
 from schemas.products import ProductUpdate
 from sqlalchemy.orm import Session
-from utils.dependencies import verify_admin
 
 router = APIRouter()
 
@@ -38,23 +39,51 @@ def create_product_category(
     return category
 
 
-@router.get("/category", response_model=list[ProductCategoryShow])
-def product_category_list(session: Session = Depends(get_db)):
+@router.get("/category", response_model=PaginatedResponse[ProductCategoryShow])
+def product_category_list(
+    request: Request,
+    pagination: Annotated[PaginationParams, Depends(pagination_params)],
+    session: Session = Depends(get_db),
+):
     repository = ProductCategoryRepository(session)
-    product_categories = repository.select_all_records()
-    return product_categories
+    paginator = Paginator(
+        request=request,
+        repository=repository,
+        page=pagination.page,
+        per_page=pagination.per_page,
+        order=pagination.order,
+    )
+    data = paginator.get_response()
+    return data
 
 # ====================================================== Products |
 
-@router.get("/", response_model=list[ProductShow])
-def products_list(session: Session = Depends(get_db), offset: int = 0, limit: int = 10):
+@router.get("/", response_model=PaginatedResponse[ProductShow])
+def products_list(
+    request: Request,
+    pagination: Annotated[PaginationParams, Depends(pagination_params)],
+    session: Session = Depends(get_db)
+):
+    """
+    Inspired by https://lewoudar.medium.com/fastapi-and-pagination-d27ad52983a
+    """
     repository = ProductsRepository(session)
-    products = repository.select_all_with_categories(offset=offset, limit=limit)
-    return products
+    paginator = Paginator(
+        request=request,
+        repository=repository,
+        page=pagination.page,
+        per_page=pagination.per_page,
+        order=pagination.order,
+    )
+    data = paginator.get_response()
+    return data
 
 
 @router.post("/", response_model=ProductDetail, status_code=status.HTTP_201_CREATED)
-def create_product(product: ProductCreate, session: Session = Depends(get_db)):
+def create_product(
+    product: ProductCreate,
+    session: Session = Depends(get_db),
+):
     repository = ProductsRepository(session)
     data = product.model_dump()
     try:
@@ -92,8 +121,10 @@ def update_product(
 
 
 @router.get("/{product_id}", response_model=ProductShow)
-def detail_product(product_id: int, session: Session = Depends(get_db)):
+def detail_product(
+    product_id: int,
+    session: Session = Depends(get_db)
+):
     repository = ProductsRepository(session)
     product = repository.get_record_by_id(record_id=product_id)
     return product
-

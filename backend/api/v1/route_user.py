@@ -24,7 +24,7 @@ router = APIRouter()
 
 @router.get("/", response_model=List[ShowUser])
 def users_list(session: Session = Depends(get_db)):
-    users = UsersRepository(session).select_all_records()
+    users = UsersRepository(session).select_records()
     return users
 
 

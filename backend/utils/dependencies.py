@@ -1,4 +1,4 @@
-# Dependenc
+# Dependencies
 from api.v1.route_auth import oauth2_scheme
 from core.config import settings
 from db import get_db
