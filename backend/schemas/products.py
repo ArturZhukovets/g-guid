@@ -33,7 +33,7 @@ class ProductShow(ProductBase):
     carbohydrates: float
     category: ProductCategory
 
-    class Config:
+    class ConfigDict:
         from_attributes = True
 
 

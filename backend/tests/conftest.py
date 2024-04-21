@@ -60,7 +60,7 @@ def db_session(app: FastAPI) -> Generator[SessionTesting, Any, None]:
     connection.close()
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(autouse=True, scope="module")
 def client(
     app: FastAPI, db_session: SessionTesting
 ) -> Generator[TestClient, Any, None]:
@@ -82,6 +82,7 @@ def client(
 
 @pytest.fixture(scope="module")
 def user(db_session: SessionTesting):
+    """Create a simple user with default rights"""
     password = Hasher.get_password_hash(settings.TEST_USER_PASSWORD)
     user_pydantic = UserCreate(name=settings.TEST_USER_NAME, password=password)
     repository = UsersRepository(db_session)
@@ -92,6 +93,7 @@ def user(db_session: SessionTesting):
 
 @pytest.fixture(scope="module")
 def admin_user(db_session: SessionTesting):
+    """Create an admin user"""
     password = Hasher.get_password_hash(settings.TEST_ADMIN_PASSWORD)
     user_pydantic = UserCreate(name=settings.TEST_ADMIN_NAME, password=password)
     repository = UsersRepository(db_session)

@@ -1,4 +1,3 @@
-from fastapi.security import OAuth2PasswordRequestForm
 
 
 def test_authorize(client, user):

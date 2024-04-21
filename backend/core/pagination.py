@@ -30,9 +30,6 @@ class PaginatedResponse(BaseModel, Generic[M]):
     next_page: Optional[AnyHttpUrl] = Field(None, description='url of the next page if it exists')
     prev_page: Optional[AnyHttpUrl] = Field(None, description='url of the previous page if it exists')
 
-    class Config:
-        pass
-        # arbitrary_types_allowed = True
 
 class Paginator:
     def __init__(
