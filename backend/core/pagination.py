@@ -50,7 +50,7 @@ class Paginator:
         self.page = page
         self.per_page = per_page
         self.limit = per_page
-        self.offset = page - 1 if page == 1 else page * per_page
+        self.offset = page - 1 if page == 1 else (page - 1) * per_page
         self.request = request
 
         self.number_of_pages = 0

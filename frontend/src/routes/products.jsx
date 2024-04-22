@@ -4,24 +4,61 @@ import axios from "axios";
 import {productsBaseUrl} from "../endpoints";
 import ProductForm from "../components/ProductForm";
 import Product from "../components/Product";
+import { PER_PAGE } from "../constants";
 import { IoCloseCircleSharp, IoHammerSharp } from 'react-icons/io5';
 
 function Products() {
   const [products, setProducts] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [fetching, setFetching] = useState(true);
+  const [totalCount, setTotalCount] = useState(0);
   const [updateForm, setUpdateForm] = useState(false)
+  console.log(currentPage)
+  
+  useEffect( () => {
+    if (fetching) {
+      axios.get(`${productsBaseUrl}?page=${currentPage}&per_page=${PER_PAGE}`)
+      .then(response => {
+        setProducts([...products, ...response.data.items])
+        setCurrentPage(prevState => prevState + 1);
+        setTotalCount(response.data.count)
+      }).finally( () => setFetching(false));
+    }
+  }, [fetching]);
+
+  useEffect( () => {
+    document.addEventListener("scroll", scrollHandler)
+    return function() {
+      document.removeEventListener('scroll', scrollHandler)
+    }
+  })
+
+  const scrollHandler = (e) => {
+    let fullPageHeight = e.target.documentElement.scrollHeight;
+    let scrollTop = e.target.documentElement.scrollTop;
+    if (fullPageHeight - (scrollTop + window.innerHeight) < 100 && products.length < totalCount) {
+      console.log("loading...")
+      setFetching(true)
+      // console.log(products.length)
+      // console.log("TOTAL COUNT", totalCount)
+    } 
+    // else {
+    //   console.log("asdasdas", products.length)
+    // }
+    
+    
+  }
 
   const fetchProductsList = async () => {
     try {
-      const response = await axios.get(productsBaseUrl)
-      setProducts(response.data);
+      const response = await axios.get(`${productsBaseUrl}?page=${currentPage}&per_page=${PER_PAGE}`)
+      setProducts([...products, ...response.data.items]);
+      setCurrentPage(prevState => prevState + 1);
+      setTotalCount(response.data.count)
     } catch (error) {
       console.log("Error:", error)
-    }
+    } finally { setFetching(false) };
   };
-
-  useEffect( () => {
-    fetchProductsList();
-  }, []);
 
   const handleCreateProduct = async (formData) => {
     try {
@@ -37,7 +74,7 @@ function Products() {
   const handleDeleteProduct = async (product) => {
     try {
       const deleteURL = `${productsBaseUrl}${product.id}`
-      const response = await axios.delete(deleteURL);
+      await axios.delete(deleteURL);
       fetchProductsList();
     } catch (error) {
       console.error(error);

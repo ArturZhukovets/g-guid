@@ -9,6 +9,7 @@ const Product = ({ product, onDelete, onUpdate}) => {
 
     return (
         <div className="product-item">
+            <h5>{product.id}</h5>
             <div className="product-title">
             <span>{product.title}</span>
             </div>
