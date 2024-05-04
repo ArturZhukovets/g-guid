@@ -13,7 +13,6 @@ function Products() {
   const [fetching, setFetching] = useState(true);
   const [totalCount, setTotalCount] = useState(0);
   const [updateForm, setUpdateForm] = useState(false)
-  console.log(currentPage)
   
   useEffect( () => {
     if (fetching) {
@@ -39,19 +38,12 @@ function Products() {
     if (fullPageHeight - (scrollTop + window.innerHeight) < 100 && products.length < totalCount) {
       console.log("loading...")
       setFetching(true)
-      // console.log(products.length)
-      // console.log("TOTAL COUNT", totalCount)
     } 
-    // else {
-    //   console.log("asdasdas", products.length)
-    // }
-    
-    
   }
 
   const fetchProductsList = async () => {
     try {
-      const response = await axios.get(`${productsBaseUrl}?page=${currentPage}&per_page=${PER_PAGE}`)
+      const response = await axios.get(`${productsBaseUrl}?page=${currentPage}&per_page=${PER_PAGE}&order=desc`)
       setProducts([...products, ...response.data.items]);
       setCurrentPage(prevState => prevState + 1);
       setTotalCount(response.data.count)
@@ -63,7 +55,9 @@ function Products() {
   const handleCreateProduct = async (formData) => {
     try {
       const response = await axios.post(productsBaseUrl, formData)
-      fetchProductsList();
+      const productData = response.data
+      setProducts([productData, ...products])
+      // fetchProductsList();
       return response;
     } catch (error) {
       console.error(error);
@@ -73,9 +67,10 @@ function Products() {
 
   const handleDeleteProduct = async (product) => {
     try {
-      const deleteURL = `${productsBaseUrl}${product.id}`
+      const deleteURL = `${productsBaseUrl}/${product.id}`
       await axios.delete(deleteURL);
-      fetchProductsList();
+      const updatedProducts = products.filter(el => el.id !== product.id);
+      setProducts(updatedProducts);
     } catch (error) {
       console.error(error);
       alert(error)

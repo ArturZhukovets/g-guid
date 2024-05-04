@@ -79,7 +79,7 @@ def products_list(
     return data
 
 
-@router.post("/", response_model=ProductDetail, status_code=status.HTTP_201_CREATED)
+@router.post("/", response_model=ProductShow, status_code=status.HTTP_201_CREATED)
 def create_product(
     product: ProductCreate,
     session: Session = Depends(get_db),

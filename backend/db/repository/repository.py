@@ -76,8 +76,7 @@ class SQLAlchemyRepository(AbstractRepository):
 
     def repository_order_by(self, statement: Select, field: str, order: str) -> Select:
         order = SQLAlchemyRepository.order_to_orm(order_value=order)
-        statement.order_by(order(getattr(self.model, field)))
-        return statement
+        return statement.order_by(order(getattr(self.model, field)))
 
     def select_count_of_records(self) -> int:
         statement = select(func.count(self.model.id))

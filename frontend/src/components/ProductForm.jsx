@@ -42,7 +42,7 @@ const ProductForm = ({ onSubmit, buttonName, currentProduct}) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const formData = {...productData, category_id: 98} 
+        const formData = {...productData, category_id: 97} 
         // check if update current or create a new one
         if (currentProduct.title) {
             currentProduct = productData;
