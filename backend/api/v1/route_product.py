@@ -67,7 +67,6 @@ def products_list(
     """
     Inspired by https://lewoudar.medium.com/fastapi-and-pagination-d27ad52983a
     """
-    print(pagination)
     repository = ProductsRepository(session)
     paginator = Paginator(
         request=request,
