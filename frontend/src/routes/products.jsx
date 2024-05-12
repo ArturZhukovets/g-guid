@@ -4,8 +4,7 @@ import axios from "axios";
 import {productsBaseUrl} from "../endpoints";
 import ProductForm from "../components/ProductForm";
 import Product from "../components/Product";
-import DefaultSelect from "../components/UI/select/defaultSelect";
-import FilterInput from "../components/UI/input/FilterInput";
+import ProductFilter from "../components/ProductFilter";
 import { PER_PAGE } from "../constants";
 import { IoCloseCircleSharp, IoHammerSharp } from 'react-icons/io5';
 
@@ -19,8 +18,9 @@ function Products() {
   // =======================================================================
 
   // ===================== FILTER & ORDER STATES ===========================
-  const [selectedSort, setSelectedSort] = useState('')
-  const [searchQuery, setSearchQuery] = useState('')
+  const [filter, setFilter] = useState({query: "", sort: ""})
+  // const [selectedSort, setSelectedSort] = useState('')
+  // const [searchQuery, setSearchQuery] = useState('')
   // =======================================================================
 
   // const [updateForm, setUpdateForm] = useState(false)
@@ -116,45 +116,32 @@ function Products() {
   // ====================== FILTERING & SORTING & ORDERING
 
   const sortedProducts = useMemo( () => {
-    // call this func every time when update products or 'selectSort' value
+    // call this func every time when update products or 'filter.sort' value
     console.log("Call sort or filtering callback")
-    if (selectedSort) {
-      if (selectedSort === "title") {
-        return [...products].sort( (a, b) => a[selectedSort].localeCompare(b[selectedSort]))
-      } else if (selectedSort === 'date') {
+    if (filter.sort) {
+      if (filter.sort === "title") {
+        return [...products].sort( (a, b) => a[filter.sort].localeCompare(b[filter.sort]))
+      } else if (filter.sort === 'date') {
         return [...products].sort( (a, b) => a["id"] - b["id"]);
       }
     }
     return products;
-  }, [selectedSort, products])
+  }, [filter.sort, products])
 
 
   const sortedAndFilteredProducts = useMemo( () => {
-    return sortedProducts.filter( product => product.title.toLowerCase().includes(searchQuery.toLocaleLowerCase()))
-  }, [searchQuery, sortedProducts])
+    return sortedProducts.filter( product => product.title.toLowerCase().includes(filter.query.toLocaleLowerCase()))
+  }, [filter.query, sortedProducts])
 
   // =======================================================================
 
 
   return (
     <div className="content">
-      <div className="search-order-group"> 
-        <DefaultSelect 
-        value={selectedSort}
-        onChange={ (sortValue) => setSelectedSort(sortValue) }
-        defaultValue="Sort products by"
-        options={[
-          {name: "Product name", value: "title"},
-          {name: "Date added", value: "date"},
-        ]}
-        />
-        <FilterInput
-          label="Filter records:"
-          id="filter-input"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-         />
-      </div>
+      <ProductFilter
+       filter={filter}
+       setFilter={setFilter}
+       />
       <div id="products-list">
         <div className="product">
           {sortedAndFilteredProducts.map(product => (
