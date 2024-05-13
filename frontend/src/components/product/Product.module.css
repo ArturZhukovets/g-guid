@@ -1,0 +1,72 @@
+
+.productItem {
+    width: 100%;
+    margin-top: 10px;
+    border: solid gray 3px;
+    border-radius: 5%;
+    padding: 10px 20px 10px 20px;
+}
+
+.productFlexElements {
+    display: flex;
+    justify-content: space-between;
+}
+
+.managementIcons {
+    position: relative;
+    margin-right: 7%;
+}
+
+.productEdit {
+    padding-bottom: 5px;
+    color: #0e2542;
+    position: absolute;
+    bottom: 0;
+}
+
+.productDelete {
+    color: #ed4b4b;
+    position: absolute;
+    top: 0;
+}
+
+.productInfo {
+
+}
+
+.productEditForm input {
+    display: block;
+    margin: 5px;
+    width: 40%;
+  }
+
+.productEditForm button {
+margin: 5px;
+margin-top: 8px;
+display: block;
+width: 40%;
+}
+
+.productTitle {
+    display: inline-block;
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+.productDelete, .productEdit {
+    padding-top: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transform: scale(2);
+    width: 100%; /* Occupy full width of the container */
+    text-align: center; /* Center the content horizontally */
+  }
+
+.productEdit:hover, .productDelete:hover {
+    opacity: 0.5;
+  }
+
+.productCompound p {
+margin: 0.5rem;
+padding: 0px;
+}

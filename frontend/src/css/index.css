@@ -258,6 +258,10 @@ html {
   aside button:hover {
     transform: scale(1.05);
   }
+
+  .productsList{
+    width: 70%;
+  }
   
   .product {
     display: block;
@@ -321,6 +325,12 @@ html {
     margin-top: 8px;
     display: block;
     width: 40%;
+  }
+
+  .productsNotFound {
+    margin-top: 60px;
+    text-align: center;
+    width: 60%;
   }
   
   

@@ -2,11 +2,12 @@ import { Form } from "react-router-dom";
 import { useState, useEffect, useMemo } from 'react';
 import axios from "axios";
 import {productsBaseUrl} from "../endpoints";
-import ProductForm from "../components/ProductForm";
-import Product from "../components/Product";
-import ProductFilter from "../components/ProductFilter";
+import ProductForm from "../components/product/ProductForm";
+import Product from "../components/product/Product";
+import ProductFilter from "../components/product/ProductFilter";
 import { PER_PAGE } from "../constants";
-import { IoCloseCircleSharp, IoHammerSharp } from 'react-icons/io5';
+import ProductList from "../components/product/ProductList";
+import DefaultModal from "../components/UI/modal/DefaultModal";
 
 function Products() {
   const [products, setProducts] = useState([]);
@@ -50,6 +51,7 @@ function Products() {
     let fullPageHeight = e.target.documentElement.scrollHeight;
     let scrollTop = e.target.documentElement.scrollTop;
     if (fullPageHeight - (scrollTop + window.innerHeight) < 100 && products.length < totalCount) {
+      console.log("PRODUCTS LENGTH - ", products.length, "TOTAL COUNT -", totalCount)
       console.log("loading...")
       setFetching(true)
     } 
@@ -142,18 +144,15 @@ function Products() {
        filter={filter}
        setFilter={setFilter}
        />
+      {/* <DefaultModal> 
+        <ProductForm onSubmit={handleCreateProduct} buttonName="Добавить"/>
+      </DefaultModal> */}
       <div id="products-list">
-        <div className="product">
-          {sortedAndFilteredProducts.map(product => (
-                  <Product 
-                  product={product}
-                  onDelete={handleDeleteProduct} 
-                  onUpdate={handleUpdateProduct}
-                  key={product.id}
-                  />
-                  )
-                )}
-        </div>
+        <ProductList
+          handleDeleteProduct={handleDeleteProduct}
+          handleUpdateProduct={handleUpdateProduct}
+          sortedAndFilteredProducts={sortedAndFilteredProducts}
+        />
         <aside>
           <ProductForm onSubmit={handleCreateProduct} buttonName="Добавить"/>
         </aside>

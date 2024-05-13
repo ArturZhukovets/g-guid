@@ -1,5 +1,5 @@
-import DefaultSelect from "./UI/select/defaultSelect.jsx"
-import FilterInput from "./UI/input/FilterInput.jsx"
+import DefaultSelect from "../UI/select/defaultSelect.jsx"
+import FilterInput from "../UI/input/FilterInput.jsx"
 
 
 const ProductFilter = ({filter, setFilter}) => {
