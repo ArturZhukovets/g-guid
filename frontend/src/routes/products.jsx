@@ -2,8 +2,10 @@ import { Form } from "react-router-dom";
 import { useState, useEffect, useMemo } from 'react';
 import axios from "axios";
 import {productsBaseUrl} from "../endpoints";
+import AddProductBlock from "../components/AddProductBlock";
 import ProductForm from "../components/product/ProductForm";
-import Product from "../components/product/Product";
+import { GrAddCircle } from "react-icons/gr";
+
 import ProductFilter from "../components/product/ProductFilter";
 import { PER_PAGE } from "../constants";
 import ProductList from "../components/product/ProductList";
@@ -20,12 +22,11 @@ function Products() {
 
   // ===================== FILTER & ORDER STATES ===========================
   const [filter, setFilter] = useState({query: "", sort: ""})
-  // const [selectedSort, setSelectedSort] = useState('')
-  // const [searchQuery, setSearchQuery] = useState('')
   // =======================================================================
 
-  // const [updateForm, setUpdateForm] = useState(false)
-  
+  // ===================== MODAL WINDOW ====================================
+  const [modalVisible, setModalVisible] = useState(false)
+
   // ===================== PAGINATION ===================
   // https://www.youtube.com/watch?v=J2MWOhV8T6o&t=1s
 
@@ -79,7 +80,7 @@ function Products() {
       const response = await axios.post(productsBaseUrl, formData)
       const productData = response.data
       setProducts([productData, ...products])
-      // fetchProductsList();
+      // setModalVisible(false)
       return response;
     } catch (error) {
       console.error(error);
@@ -144,9 +145,6 @@ function Products() {
        filter={filter}
        setFilter={setFilter}
        />
-      {/* <DefaultModal> 
-        <ProductForm onSubmit={handleCreateProduct} buttonName="Добавить"/>
-      </DefaultModal> */}
       <div id="products-list">
         <ProductList
           handleDeleteProduct={handleDeleteProduct}
@@ -154,7 +152,17 @@ function Products() {
           sortedAndFilteredProducts={sortedAndFilteredProducts}
         />
         <aside>
-          <ProductForm onSubmit={handleCreateProduct} buttonName="Добавить"/>
+          <AddProductBlock
+            modalVisible={modalVisible}
+            setModalVisible={setModalVisible}
+            handleCreateProduct={handleCreateProduct}
+          />
+          {/* <div className="formProduct">
+            <button type="button" onClick={() => setModalVisible(true)}>
+              <GrAddCircle/> Добавить
+            </button>
+            <ProductForm onSubmit={handleCreateProduct} buttonName="Добавить"/>
+          </div> */}
         </aside>
       </div>
     </div>

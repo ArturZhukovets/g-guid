@@ -58,11 +58,12 @@ const ProductForm = ({ onSubmit, buttonName, currentProduct}) => {
             handleButtonStyle("error")
             // TODO ADD ALERT HANDLING
         })
+        
     }
 
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="formProduct">
             <input
             type="text"
             placeholder="Название"

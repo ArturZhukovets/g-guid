@@ -237,8 +237,7 @@ html {
     margin-top: 60px;
     margin-left: 20%;
   }
-
-  aside form input, aside form select, aside form button {
+  .formProduct input, .formProduct select, .formProduct button {
     width: 100%;
     padding: 15px 5%;
     font-family: 'Montserrat', sans-serif;
@@ -249,13 +248,13 @@ html {
     display: block;
   }
 
-  aside button {
+  button {
     cursor: pointer;
     border-color: #62afa1;
     transition: transform 500ms ease;
   }
   
-  aside button:hover {
+  button:hover {
     transform: scale(1.05);
   }
 
@@ -268,39 +267,7 @@ html {
     margin: 10px;
     width: 50%;
   }
-  
-  .product-item {
-    width: 100%;
-    margin-top: 10px;
-    border: solid gray 3px;
-    border-radius: 5%;
-    padding: 10px 20px 10px 20px;
-  }
-  
-  .product-title {
-    display: inline-block;
-    font-size: 1.2rem;
-    font-weight: 500;
-  }
-  
-  .product-delete, .product-edit {
-    color: #62afa1;
-    padding-top: 4px;
-    font-size: 0.8rem;
-    float: right;
-    cursor: pointer;
-    transform: scale(2);
-  }
-  
-  .product-edit {
-    margin-right: 30px;
-  }
-
-  .product-edit:hover, .product-delete:hover {
-    opacity: 0.5;
-  }
-  
-  
+    
   .product img {
     width: 4rem;
     height: 4rem;
@@ -308,23 +275,6 @@ html {
     margin-right: 2rem;
     border-radius: 1.5rem;
     object-fit: cover;
-  }
-
-  .product-compound p {
-    margin: 0.5rem;
-    padding: 0px;
-  }
-  
-  .product-edit-form input {
-    display: block;
-    margin: 5px;
-    width: 40%;
-  }
-  .product-edit-form button {
-    margin: 5px;
-    margin-top: 8px;
-    display: block;
-    width: 40%;
   }
 
   .productsNotFound {
