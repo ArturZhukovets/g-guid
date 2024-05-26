@@ -1,5 +1,5 @@
 from typing import Annotated
-
+from services.products import crud
 from core.pagination import PaginationParams, pagination_params, PaginatedResponse, Paginator
 from db import get_db
 from db.repository.products import ProductCategoryRepository
@@ -80,14 +80,13 @@ def products_list(
 
 
 @router.post("/", response_model=ProductShow, status_code=status.HTTP_201_CREATED)
-def create_product(
+async def create_product(
     product: ProductCreate,
     session: Session = Depends(get_db),
 ):
     repository = ProductsRepository(session)
-    data = product.model_dump()
     try:
-        product = repository.add_record(data=data)
+        product = await crud.create_product(repository, product)
     except Exception as ex:
         print(ex)
         raise HTTPException(
