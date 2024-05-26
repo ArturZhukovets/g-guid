@@ -27,6 +27,7 @@ class ProductBase(BaseModel):
 
 class ProductShow(ProductBase):
     id: int
+    ru_title: str | None
     calories: float
     proteins: float
     fat: float

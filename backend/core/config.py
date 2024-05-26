@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 
 from dotenv import load_dotenv
-from pydantic import Field
+from pydantic import Field, BaseModel
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -13,7 +13,7 @@ env_path = os.path.join(BASE_DIR, ".env")
 
 
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_file=env_path)
+    model_config = SettingsConfigDict(env_file=env_path, case_sensitive=False)  # TODO handle how to work with this field
     PROJECT_NAME: str = "G-Guid"
     PROJECT_VERSION: str = "0.1.0"
 
@@ -50,6 +50,10 @@ class Settings(BaseSettings):
     ALLOW_HEADERS: list[str] = ["*"]
     ALLOW_CREDENTIALS: bool = True
     ALLOW_ORIGINS: list[str] = ["*"]
+
+    # Translation
+    LINGVANEX_API_URL: str
+    LINGVANEX_API_KEY: str
 
 
 settings = Settings()
