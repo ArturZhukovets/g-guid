@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
 
 import aiohttp
-import requests
 import pycountry
 
 from core.config import settings
