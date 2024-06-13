@@ -108,15 +108,20 @@ def delete_product(
 
 
 @router.put("/{product_id}", response_model=ProductShow)
-def update_product(
+async def update_product(
     product_id: int,
     product: ProductUpdate,
     session: Session = Depends(get_db),
 ):
-    data = product.model_dump()
     repository = ProductsRepository(session)
-    updated_product = repository.update_product(product_id, data=data)
-    return updated_product
+    try:
+        upd_product = await crud.update_product(repository, product, product_id)
+    except Exception as ex:
+        raise HTTPException(
+            detail=f"Something went wrong while updating product.\n Detail: {ex}",
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        )
+    return upd_product
 
 
 @router.get("/{product_id}", response_model=ProductShow)

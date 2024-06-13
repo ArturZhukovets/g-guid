@@ -38,7 +38,7 @@ class TranslatorLingvanex(Translator):
             "Authorization": f"Bearer {self._token}"
         }
 
-    async def translate_text(self, text: str, src_lang: str, tgt_lang: str):
+    async def translate_text(self, text: str, src_lang: str, tgt_lang: str) -> str:
         src_lang_locale = LanguageToLocaleConverter.convert(src_lang)
         tgt_lang_locale = LanguageToLocaleConverter.convert(tgt_lang)
         payload = {

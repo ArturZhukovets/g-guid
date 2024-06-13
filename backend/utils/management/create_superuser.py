@@ -4,7 +4,7 @@ from db.models.exersices import Exercise
 from db.models.users import User
 
 
-def manage_create_superuser():
+async def manage_create_superuser():
     with SessionLocal() as session:
         while True:
             username = input("Enter the username: ")

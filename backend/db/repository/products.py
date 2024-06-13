@@ -30,25 +30,25 @@ class ProductsRepository(SQLAlchemyRepository):
         products = products.offset(offset).limit(limit).all()
         return count, products
 
-    def paginate(
-            self,
-            limit: int,
-            offset: int,
-            order: str = "asc",
-            condition: Optional[dict] = None
-    ) -> tuple[int, Sequence[Any]]:
-        order = SQLAlchemyRepository.order_to_orm(order_value=order)
-        query = select(self.model).order_by(order(self.model.id)).options(
-                    joinedload(self.model.category)
-        )
-        count = self.session.scalar(select(func.count(self.model.id)))
-        # query.options(joinedload(self.model.category))
-        if condition:
-            query.filter_by(**condition)
-        items = self.session.scalars(statement=query.limit(limit).offset(offset)).all()
-        return count, items
+    # def paginate(
+    #         self,
+    #         limit: int,
+    #         offset: int,
+    #         order: str = "asc",
+    #         condition: Optional[dict] = None
+    # ) -> tuple[int, Sequence[Any]]:
+    #     order = SQLAlchemyRepository.order_to_orm(order_value=order)
+    #     query = select(self.model).order_by(order(self.model.id)).options(
+    #                 joinedload(self.model.category)
+    #     )
+    #     count = self.session.scalar(select(func.count(self.model.id)))
+    #     # query.options(joinedload(self.model.category))
+    #     if condition:
+    #         query.filter_by(**condition)
+    #     items = self.session.scalars(statement=query.limit(limit).offset(offset)).all()
+    #     return count, items
 
-    def update_product(self, product_id: int, data: dict):
+    def update_product(self, product_id: int, data: dict) -> Type[ProductComposition]:
         product = self.session.query(self.model).filter_by(id=product_id).first()
         if not product:
             raise ValueError("Product does not exist.")
