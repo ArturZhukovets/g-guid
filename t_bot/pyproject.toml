@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "g-guid telegram bot"
+version = "0.1.0"
+description = ""
+authors = ["ArturZhukovets <bnlvdn7483@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+aiogram = "^3.7.0"
+pydantic-settings = "^2.3.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
