@@ -41,6 +41,7 @@ class Paginator:
             order: str = "asc",
             order_by: str = "id",
             filter_condition: Optional[dict] = None,
+            select_method: Optional[Callable] = None,
     ):
         self._repository = repository
 
@@ -56,6 +57,7 @@ class Paginator:
         self.number_of_pages = 0
         self.next_page = ""
         self.prev_page = ""
+        self._select_method = select_method if select_method is not None else repository.select_records
 
     def _get_next_page(self) -> Optional[str]:
         if self.page >= self.number_of_pages:
@@ -75,14 +77,18 @@ class Paginator:
         return quotient if not rest else quotient + 1
 
     def _get_data(self) -> tuple:
-        items = self._repository.select_records(
-            condition=self._filter_condition,
+        result = self._select_method(
             order=self._order,
             offset=self.offset,
             limit=self.limit,
-            order_by=self._order_by
+            order_by=self._order_by,
+            condition=self._filter_condition,
         )
+        if isinstance(result, tuple) and len(result) == 2:
+            items, count = result
+            return items, count
         count = self._repository.select_count_of_records()
+        items = result
         return count, items
 
     def get_response(self) -> dict:

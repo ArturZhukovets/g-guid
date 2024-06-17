@@ -11,7 +11,6 @@ from fastapi import status
 from schemas.products import ProductCategoryCreate
 from schemas.products import ProductCategoryShow
 from schemas.products import ProductCreate
-from schemas.products import ProductDetail
 from schemas.products import ProductShow
 from schemas.products import ProductUpdate
 from sqlalchemy.orm import Session
@@ -52,6 +51,7 @@ def product_category_list(
         page=pagination.page,
         per_page=pagination.per_page,
         order=pagination.order,
+        order_by="id",
     )
     data = paginator.get_response()
     return data
@@ -62,11 +62,13 @@ def product_category_list(
 def products_list(
     request: Request,
     pagination: Annotated[PaginationParams, Depends(pagination_params)],
+    title: str = "",
     session: Session = Depends(get_db)
 ):
     """
     Inspired by https://lewoudar.medium.com/fastapi-and-pagination-d27ad52983a
     """
+    filter_condition = {"title": title}
     repository = ProductsRepository(session)
     paginator = Paginator(
         request=request,
@@ -74,6 +76,8 @@ def products_list(
         page=pagination.page,
         per_page=pagination.per_page,
         order=pagination.order,
+        filter_condition=filter_condition,
+        select_method=repository.select_products_by_title,
     )
     data = paginator.get_response()
     return data
