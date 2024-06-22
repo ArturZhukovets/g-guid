@@ -10,7 +10,7 @@ env_path = BASE_DIR / ".env"
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=env_path, case_sensitive=False)
     bot_token: str
+    products_url: str
 
 
 settings = Settings()
-print(settings.bot_token)

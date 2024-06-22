@@ -32,6 +32,9 @@ class PaginatedResponse(BaseModel, Generic[M]):
 
 
 class Paginator:
+    # TODO Попробовать зарефакторить этот класс. Убрать request(он по сути не нужен).
+    #  Имплементировать логику пагинатора где-нибудь прямо внутри Репозитория.
+    #  Просто отдавать от метода репозитория Query и этот Query пагинировать.
     def __init__(
             self,
             request,
